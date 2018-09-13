@@ -41,6 +41,14 @@ def documentation(diagram):
     # text += "<p>" + diagram.description + "</p>\n"
     text += "\n"
 
+    text += "<h3>Tables summary</h3>\n"
+    text += "<table>\n"
+    for figure in diagram.figures:
+        if hasattr(figure, "table") and figure.table:
+            text += writeTableDesc(figure.table)
+    text += "</table>\n<br />\n\n"
+
+    text += "<h3>Tables detail</h3>\n"
     for figure in diagram.figures:
         if hasattr(figure, "table") and figure.table:
             text += writeTableDoc(figure.table)
@@ -53,6 +61,13 @@ def documentation(diagram):
 
     print "Documentation is copied to the clipboard."
     return 0
+
+
+def writeTableDesc(table):
+    text = "<tr><td><strong>" + table.name + "</strong></td>"
+    text += "<td>" + table.comment + "</td></tr>\n"
+
+    return text
 
 
 def writeTableDoc(table):
@@ -144,7 +159,7 @@ def writeColumnDoc(column, table):
     # foreign key
     for fk in table.foreignKeys:
         if fk.columns[0].name == column.name:
-            text += ("<br /><br />" if column.comment else "") + "foreign key to column <i>" + \
+            text += ("<br /><br />" if column.comment else "") + "Foreign key to column <i>" + \
                 fk.referencedColumns[0].name + "</i> on table <i>" + \
                 fk.referencedColumns[0].owner.name + "</i>."
             break
